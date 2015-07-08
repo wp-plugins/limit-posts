@@ -1,0 +1,31 @@
+/*
+* scss file for Limit Posts plugin
+*
+* Author: Colin Beeby
+*/
+/* line 9, ../sass/limitposts.scss */
+#add-edit-limit-form ul li {
+  margin-bottom: 12px;
+}
+/* line 11, ../sass/limitposts.scss */
+#add-edit-limit-form ul li label {
+  vertical-align: top;
+}
+/* line 14, ../sass/limitposts.scss */
+#add-edit-limit-form ul li input[type="radio"] {
+  vertical-align: top;
+  margin-top: 0.2em;
+}
+/* line 18, ../sass/limitposts.scss */
+#add-edit-limit-form ul li .narrative {
+  float: left;
+}
+/* line 21, ../sass/limitposts.scss */
+#add-edit-limit-form ul li input[type="number"] {
+  width: 75px;
+}
+/* line 24, ../sass/limitposts.scss */
+#add-edit-limit-form ul li #period_denominator {
+  position: relative;
+  top: -2px;
+}
