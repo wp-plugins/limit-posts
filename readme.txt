@@ -12,7 +12,7 @@ A plugin to allow administrators to limit the number of posts a user can publish
 
 == Description ==
 
-This plugin allows you to limit the number of posts (any post type, including custom post types) that a user can post, within a specified time period.
+This plugin allows you to limit the number of posts (any post type, including custom post types) that a user can publish within a specified time period.
 
 You can set up as many limits as you like, for different post types, different user roles, whatever you like. When a user tries to create a new post, the limits are checked, if the user has exceeded any of the limits, they wont be able to publish.
 
