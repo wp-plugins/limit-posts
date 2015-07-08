@@ -4,8 +4,8 @@ Plugin Name: Limit Posts
 Plugin URI: www.limitposts.com
 Description: A plugin to allow administrators to limit the number of posts a user can publish in a given time period.
 Version: 1.0
-Author: Colin Beeby
-Author URI: www.colinbeeby.com
+Author: PluginCentral
+Author URI: https://profiles.wordpress.org/plugincentral/
 Text Domain: limit-posts
 License: GPLv2
 */
