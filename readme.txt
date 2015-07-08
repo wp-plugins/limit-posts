@@ -1,7 +1,7 @@
 === Plugin Name ===
 Contributors: PluginCentral
 Donate link: www.limitposts.com/donate/
-Tags: limits, limit posts, limit pages, limit cpt, limit custom post types, restrict posts, post creating limit, post creation limit, posts per user, user post limit, publish limit, limit, post
+Tags: limit posts, limit number of posts, limit publish, limit post creation, limit post type, limit user, posts per user, restrict posts, restrict number of posts
 Requires at least: 4.0.0
 Tested up to: 4.2.2
 Stable tag: 1.0
