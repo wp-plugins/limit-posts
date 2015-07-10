@@ -4,7 +4,7 @@ Donate link: www.limitposts.com/donate/
 Tags: limit posts, limit number of posts, limit publish, limit post creation, limit post type, limit user, posts per user, restrict posts, restrict number of posts
 Requires at least: 4.0.0
 Tested up to: 4.2.2
-Stable tag: 1.0.1
+Stable tag: 1.0.2
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -19,13 +19,12 @@ You can set up as many limits as you like, for different post types, different u
 = Main Features =
 
 *	Limit the creation of any post type.
-*	Limit the number of posts by user role.
+*	Limit the number of posts by user or by user role.
 *	Specify 0 to block a post type completely.
 *	Time period can be in seconds, minutes, hours, days, weeks, months or years
 *	Make a limit last forever by specifying 9999 years
 
-In the next version I'll be adding the ability to specify post status, so you can limit the number of revisions or auto drafts (or whatever you like). I'll also be adding the ability to specify individual users as well as user roles.
-In a future release I'll also be adding the ability to incorporate this functionality in custom forms.
+In the next version I'll be adding the ability to specify post status, so you can limit the number of revisions or auto drafts (or whatever you like). In a future release I'll also be adding the ability to incorporate this functionality in custom forms.
 
 == Installation ==
 
@@ -69,8 +68,15 @@ A message will be displayed, informing the user that the limit has been reached.
 
 == Changelog ==
 
-= 1.0 = 
+= 1.0.0 = 
 Initial release
+
+= 1.0.1 =
+Minor bug fixes
+
+= 1.0.2 = 
+Minor bug fixes. 
+Rules can now be created for individual users.
 
 == Upgrade Notice ==
 
