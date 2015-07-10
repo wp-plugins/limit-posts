@@ -196,8 +196,9 @@ class CBLimitPosts{
 	private function isLimitReached($limitPostRules){
 		//get all relevent rules
 		$userRole = $this->getCurrentUserRole();
+		$userId = $this->getCurrentUserId();
 		global $typenow;
-		$releventRules = $this->getReleventRules($limitPostRules, $userRole, $typenow);
+		$releventRules = $this->getReleventRules($limitPostRules, $userRole, $userId, $typenow);
 		if(count($releventRules) <= 0){
 			return false;
 		}
@@ -215,9 +216,13 @@ class CBLimitPosts{
 		return false;
 	}
 	
-	private function getReleventRules($limitPostRules, $userRole, $typenow){
+	private function getReleventRules($limitPostRules, $userRole, $userId, $typenow){
+		
 		//filter out any rules not for users role
 		$rules = $this->filterRulesForUserRole($limitPostRules, $userRole);
+		
+		//filter out any rules not for user id
+		$rules = $this->filterRulesForUserId($rules, $userId);
 		
 		//filter out any rules not for post type
 		$rules = $this->filterRulesForPostType($rules, $typenow);
@@ -233,13 +238,57 @@ class CBLimitPosts{
 		return ucfirst($userRole[0]);
 	}
 	
+	private function getCurrentUserId(){
+		global $current_user;
+		
+		$userId = $current_user->ID;
+		
+		return $userId;
+	}
+	
 	//filter out any rules not for a user role
 	private function filterRulesForUserRole($inputRules, $userRole){
 		$filteredRules = array();
 		
 		foreach($inputRules['rule'] as $rule){
-			if($rule['role'] == $userRole){
+			$userOrRole = $this->getUserOrRole($rule);
+			if($userOrRole != 'role'){
 				$filteredRules[] = $rule;
+			}
+			else{
+				if($rule['role'] == $userRole){
+					$filteredRules[] = $rule;
+				}
+			}
+		}
+		
+		return $filteredRules;
+	}
+	
+	private function getUserOrRole($rule){
+		$roleOrUser = 'role';
+		if(!isset($rule['role_or_user'])){
+			$roleOrUser = 'role';
+		}
+		else{
+			$roleOrUser = $rule['role_or_user'];
+		}
+		
+		return $roleOrUser;
+	}
+	
+	private function filterRulesForUserId($inputRules, $userId){
+		$filteredRules = array();
+		
+		foreach($inputRules as $rule){
+			$userOrRole = $this->getUserOrRole($rule);
+			if($userOrRole != 'user'){
+				$filteredRules[] = $rule;
+			}
+			else{
+				if($rule['user_id'] == $userId){
+					$filteredRules[] = $rule;
+				}
 			}
 		}
 		

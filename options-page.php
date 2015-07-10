@@ -5,9 +5,20 @@
 		<form id="add-edit-limit-form" method="post">
 		<ul>
 			<li>
+				<input type="radio" name="role_or_user" id="role_radio" value="role" checked>
 				<p class="description narrative">Any user whose role is&nbsp;</p>
+				</input>
 				<select id="user_roles_select">
 					<?php echo $this->getUserRoles(); ?>
+				</select>
+			</li>
+			<p class="description narrative" style="padding:0;height:10px;position:relative;top:-10px;">Or</p>
+			<li>
+				<input type="radio" name="role_or_user" id="user_radio" value="user">
+				<p class="description narrative">User&nbsp;</p>
+				</input>
+				<select id="user_select">
+					<?php echo $this->getUsers(); ?>
 				</select>
 			</li>
 			<li>
@@ -44,7 +55,7 @@
 		<table class="wp-list-table widefat fixed striped" id="rules_list">
 			<thead>
 				<tr>
-					<th>User Role</th>
+					<th>User/Role</th>
 					<th>Limit</th>
 					<th>Post Type</th>
 					<th>Period</th>
@@ -53,7 +64,7 @@
 			</thead>
 			<tfoot>
 				<tr>
-					<th>User Role</th>
+					<th>User/Role</th>
 					<th>Limit</th>
 					<th>Post Type</th>
 					<th>Period</th>
@@ -66,7 +77,24 @@
 			if(isset($limitPostsRules['rule'])){
 				foreach($limitPostsRules['rule'] as $k => $v){
 					echo '<tr>';
-					echo '<td>'.$v['role'].'<input type="hidden" name="limit_posts[rule]['.$count.'][role]" value="'.$v['role'].'"></td>';
+					$role_or_user = 'user';
+					if(!isset($v['role_or_user'])){
+						$role_or_user = 'role';
+					}
+					else{
+						$role_or_user = $v['role_or_user'];
+					}
+					
+					echo '<input type="hidden" name="limit_posts[rule]['.$count.'][role_or_user]" value="'.$role_or_user.'">';
+					
+					if($role_or_user == 'user'){
+					echo '<td>'.$v['user_name'].'<input type="hidden" name="limit_posts[rule]['.$count.'][user_id]" value="'.$v['user_id'].'"><input type="hidden" name="limit_posts[rule]['.$count.'][user_name]" value="'.$v['user_name'].'"></td>';
+					}
+					else{
+						echo '<td>'.$v['role'].'<input type="hidden" name="limit_posts[rule]['.$count.'][role]" value="'.$v['role'].'"></td>';
+					}
+					
+					
 					echo '<td>'.$v['limit'].'<input type="hidden" name="limit_posts[rule]['.$count.'][limit]" value="'.$v['limit'].'"></td>';
 					echo '<td>'.$v['post_type'].'<input type="hidden" name="limit_posts[rule]['.$count.'][post_type]" value="'.$v['post_type'].'"></td>';
 					echo '<td>'.$v['period_number'].'&nbsp;<input type="hidden" name="limit_posts[rule]['.$count.'][period_number]" value="'.$v['period_number'].'">'.$v['period_denominator'].'<input type="hidden" name="limit_posts[rule]['.$count.'][period_denominator]" value="'.$v['period_denominator'].'"></td>';
