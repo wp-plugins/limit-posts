@@ -16,7 +16,7 @@ $j(function(){
 		resetAddEditForm();
 		$j('#add_role_submit').css('display', 'block');
 		$j('#edit_role_submit').css('display', 'none');
-		tb_show('New Limit Posts rule','TB_inline?height=275&width=275&inlineId=add-edit-tb');
+		tb_show('New Limit Posts rule','TB_inline?height=320&width=275&inlineId=add-edit-tb');
 		return false;
 	});
 	
@@ -54,6 +54,7 @@ $j(function(){
 		var userRole = $j('#user_roles_select').find(':selected').text();
 		var userId = $j('#user_select').find(':selected').val();
 		var userName = $j('#user_select').find(':selected').text();
+		var publishAction = $j('#publish_action').find(':selected').text();
 		var limit = $j('#limit_number').val();
 		var postType = $j('#post_types_select').find(':selected').text();
 		var periodNumber = $j('#period_number').val();
@@ -66,6 +67,7 @@ $j(function(){
 		else{
 			tableRow.append('<td>'+ userRole +'<input type="hidden" name="limit_posts[rule][' + counter + '][role]" value="'+userRole+'"></td>');
 		}
+		tableRow.append('<td>'+publishAction+'<input type="hidden" name="limit_posts[rule][' + counter + '][publish_action]" value="'+publishAction+'"></td>');
 		tableRow.append('<td>'+ limit +'<input type="hidden" name="limit_posts[rule][' + counter + '][limit]" value="'+limit+'"></td>');
 		tableRow.append('<td>'+ postType +'<input type="hidden" name="limit_posts[rule][' + counter + '][post_type]" value="'+postType+'"></td>');
 		tableRow.append('<td>'+periodNumber+'&nbsp;'+periodDenominator+'<input type="hidden" name="limit_posts[rule][' + counter + '][period_number]" value="'+periodNumber+'"><input type="hidden" name="limit_posts[rule][' + counter + '][period_denominator]" value="'+periodDenominator+'"></td>');
@@ -94,7 +96,7 @@ $j(function(){
 		$j('#add_role_submit').css('display', 'none');
 		$j('#edit_role_submit').css('display', 'block');
 		
-		tb_show('Edit Limit Posts rule', 'TB_inline?height=275&width=275&inlineId=add-edit-tb');
+		tb_show('Edit Limit Posts rule', 'TB_inline?height=320&width=275&inlineId=add-edit-tb');
 	});
 	
 	//Populate the add edit form with existing values
@@ -109,20 +111,22 @@ $j(function(){
 		$j('#user_select').prop('disabled', true);
 		
 		$userOrRolesSelectIndex = 1;
-		$limitNumberIndex = 2;
-		$postTypesSelectIndex = 3;
-		$periodNumberIndex = 4;
-		$periodDenominatorIndex = 5;
+		$publishActionSelectIndex = 2;
+		$limitNumberIndex = 3;
+		$postTypesSelectIndex = 4;
+		$periodNumberIndex = 5;
+		$periodDenominatorIndex = 6;
 		
 		if(existingValues[0] == 'user'){
 			$j('#user_radio').prop('checked', true);
 			$j('#user_roles_select').prop('disabled',true);
 			$j('#user_select').prop('disabled', false);
 			$j('#user_select option[value="'+existingValues[$userOrRolesSelectIndex]+'"]').prop('selected', true);
-			$limitNumberIndex = 3;
-			$postTypesSelectIndex = 4;
-			$periodNumberIndex = 5;
-			$periodDenominatorIndex = 6;
+			$publishActionSelectIndex += 1;
+			$limitNumberIndex += 1;
+			$postTypesSelectIndex += 1;
+			$periodNumberIndex += 1;
+			$periodDenominatorIndex += 1;
 		}
 		else{
 			$j('#role_radio').prop('checked', true);
@@ -130,6 +134,7 @@ $j(function(){
 			$j('#user_select').prop('disabled', true);
 			$j('#user_roles_select option[value="'+existingValues[$userOrRolesSelectIndex]+'"]').prop('selected', true);
 		}
+		$j('#publish_action option[value="'+existingValues[$publishActionSelectIndex]+'"]').prop('selected', true);
 		$j('#limit_number').val(existingValues[$limitNumberIndex]);
 		$j('#post_types_select option[value="'+existingValues[$postTypesSelectIndex]+'"]').prop('selected', true);
 		$j('#period_number').val(existingValues[$periodNumberIndex]);

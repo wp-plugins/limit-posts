@@ -3,7 +3,7 @@
 Plugin Name: Limit Posts
 Plugin URI: www.limitposts.com
 Description: A plugin to allow administrators to limit the number of posts a user can publish in a given time period.
-Version: 1.0.1
+Version: 1.0.3
 Author: PluginCentral
 Author URI: https://profiles.wordpress.org/plugincentral/
 Text Domain: limit-posts
@@ -154,27 +154,23 @@ class CBLimitPosts{
 		
 		return implode($postTypesOptions);
 	}
-
-	private function getPostStati(){
-		global $wp_post_statuses;
-		
-		$postStatiOptions = array();
-		
-		$postStati = get_post_stati('', 'names');
-		foreach($postStati as $key=>$value){
-			$postStatiOptions[] = '<option value='.$key.'>'.$value.'</option>';
-		}
-		
-		return implode($postStatiOptions);
-	}
 	
+	private function getPublishActions(){
+		$publishActions = array();
+		
+		$publishActions[] = '<option value="Publish">Publish</option>';
+		$publishActions[] = '<option value="Submit For Review">Submit For Review</option>';
+		
+		return implode($publishActions);
+	}
+
 	//Apply any post limit rules which have been set up
 	public function applyPostLimtRules(){
 		wp_dequeue_style('cb_disable_publish_css');
 		
 		global $pagenow;
 		
-		if ($pagenow == 'post-new.php'){
+		if ($pagenow == 'post-new.php'){  //submit for review and publish
 			$limitPostRules = $this->getPluginOptions();
 			
 			//Check if any rules have been setup
@@ -206,7 +202,8 @@ class CBLimitPosts{
 		foreach($releventRules as $releventRule){
 			//how many posts of this type has this user published within the rules time periods
 			$startDateTime = $this->getStartDateTime($releventRule['period_number'], $releventRule['period_denominator']);
-			$postCount = $this->getPostCount($typenow, $startDateTime);
+			$postCount = $this->getPostCount($typenow, $startDateTime, $releventRule['publish_action']);
+			
 			if($postCount >= $releventRule['limit']){
 				return true;  //limit has been reached
 			}
@@ -341,15 +338,19 @@ class CBLimitPosts{
 		return $intervalSpec;
 	}
 	
-	private function getPostCount($postType, $startDateTime){
+	private function getPostCount($postType, $startDateTime, $publishAction){
 		global $wpdb;
 		$userId = get_current_user_id();
-		
 		$query = "SELECT COUNT(ID) FROM $wpdb->posts WHERE ";
 		$query .= "post_author=$userId ";
 		$query .= "AND post_type='$postType' ";
 		$query .= "AND post_date>'".$startDateTime->format('c')."' ";
-		$query .= "AND post_status='publish'";
+		if($publishAction == "Publish"){
+			$query .= "AND post_status='publish'";  
+		}
+		elseif($publishAction == "Submit For Review"){
+			$query .= "AND post_status='pending'";  //or pending
+		}
 		
 		$count = $wpdb->get_var($query);
 		

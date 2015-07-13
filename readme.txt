@@ -4,15 +4,15 @@ Donate link: www.limitposts.com/donate/
 Tags: limit posts, limit number of posts, limit publish, limit post creation, limit post type, limit user, posts per user, restrict posts, restrict number of posts
 Requires at least: 4.0.0
 Tested up to: 4.2.2
-Stable tag: 1.0.2
+Stable tag: 1.0.3
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
-A plugin to allow administrators to limit the number of posts a user can publish in a given time period.
+A plugin to allow administrators to limit the number of posts a user can publish or submit for review in a given time period.
 
 == Description ==
 
-This plugin allows you to limit the number of posts (any post type, including custom post types) that a user can publish within a specified time period.
+This plugin allows you to limit the number of posts (any post type, including custom post types) that a user can publish or submit for review within a specified time period.
 
 You can set up as many limits as you like, for different post types, different user roles, whatever you like. When a user tries to create a new post, the limits are checked, if the user has exceeded any of the limits, they wont be able to publish.
 
@@ -24,7 +24,7 @@ You can set up as many limits as you like, for different post types, different u
 *	Time period can be in seconds, minutes, hours, days, weeks, months or years
 *	Make a limit last forever by specifying 9999 years
 
-In the next version I'll be adding the ability to specify post status, so you can limit the number of revisions or auto drafts (or whatever you like). In a future release I'll also be adding the ability to incorporate this functionality in custom forms.
+In a future release I'll also be adding the ability to incorporate this functionality in custom forms.
 
 == Installation ==
 
@@ -78,7 +78,13 @@ Minor bug fixes
 Minor bug fixes. 
 Rules can now be created for individual users.
 
+= 1.0.3 = 
+Publish or Submit for review can now be chosen for a rule.
+
 == Upgrade Notice ==
 
 = 1.0 = 
 Initial release
+
+= 1.0.3 = 
+Publish or Submit For Review can now be chosen for a rule.

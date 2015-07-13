@@ -22,7 +22,13 @@
 				</select>
 			</li>
 			<li>
-				<p class="description narrative">will be limited to publishing&nbsp;</p>
+				<p class="description narrative">cannot&nbsp;</p>
+				<select id="publish_action">
+					<?php echo $this->getPublishActions(); ?>
+				</select>
+			</li>
+			<li>
+				<p class="description narrative">more than&nbsp;</p>
 				<input type="number" name="limit_number" id="limit_number" min="0" max="9999" value="5">
 			</li>
 			<li>
@@ -56,6 +62,7 @@
 			<thead>
 				<tr>
 					<th>User/Role</th>
+					<th>Action</th>
 					<th>Limit</th>
 					<th>Post Type</th>
 					<th>Period</th>
@@ -65,6 +72,7 @@
 			<tfoot>
 				<tr>
 					<th>User/Role</th>
+					<th>Action</th>
 					<th>Limit</th>
 					<th>Post Type</th>
 					<th>Period</th>
@@ -77,11 +85,9 @@
 			if(isset($limitPostsRules['rule'])){
 				foreach($limitPostsRules['rule'] as $k => $v){
 					echo '<tr>';
-					$role_or_user = 'user';
-					if(!isset($v['role_or_user'])){
-						$role_or_user = 'role';
-					}
-					else{
+					
+					$role_or_user = 'role';
+					if(isset($v['role_or_user'])){
 						$role_or_user = $v['role_or_user'];
 					}
 					
@@ -94,7 +100,12 @@
 						echo '<td>'.$v['role'].'<input type="hidden" name="limit_posts[rule]['.$count.'][role]" value="'.$v['role'].'"></td>';
 					}
 					
+					$publish_action = "Publish";
+					if(isset($v['publish_action'])){
+						$publish_action = $v['publish_action'];
+					}
 					
+					echo '<td>'.$publish_action.'<input type="hidden" name="limit_posts[rule]['.$count.'][publish_action]" value="'.$publish_action.'"></td>';
 					echo '<td>'.$v['limit'].'<input type="hidden" name="limit_posts[rule]['.$count.'][limit]" value="'.$v['limit'].'"></td>';
 					echo '<td>'.$v['post_type'].'<input type="hidden" name="limit_posts[rule]['.$count.'][post_type]" value="'.$v['post_type'].'"></td>';
 					echo '<td>'.$v['period_number'].'&nbsp;<input type="hidden" name="limit_posts[rule]['.$count.'][period_number]" value="'.$v['period_number'].'">'.$v['period_denominator'].'<input type="hidden" name="limit_posts[rule]['.$count.'][period_denominator]" value="'.$v['period_denominator'].'"></td>';
