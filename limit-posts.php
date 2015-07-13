@@ -215,7 +215,11 @@ class CBLimitPosts{
 		foreach($releventRules as $releventRule){
 			//how many posts of this type has this user published within the rules time periods
 			$startDateTime = $this->getStartDateTime($releventRule['period_number'], $releventRule['period_denominator']);
-			$postCount = $this->getPostCount($currentType, $startDateTime, $releventRule['publish_action']);
+			$ruleAction = 'Publish';
+			if(isset($releventRule['publish_action'])){
+				$ruleAction = $releventRule['publish_action'];
+			}
+			$postCount = $this->getPostCount($currentType, $startDateTime, $ruleAction);
 			//echo 'POST COUNT = '.$postCount;
 			if($postCount >= $releventRule['limit']){
 				return true;  //limit has been reached

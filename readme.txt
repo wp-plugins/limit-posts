@@ -4,7 +4,7 @@ Donate link: www.limitposts.com/donate/
 Tags: limit posts, limit number of posts, limit publish, limit post creation, limit post type, limit user, posts per user, restrict posts, restrict number of posts
 Requires at least: 4.0.0
 Tested up to: 4.2.2
-Stable tag: 1.0.4
+Stable tag: 1.0.5
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -103,6 +103,9 @@ Rules can now be created for individual users.
 
 = 1.0.3 = 
 Publish or Submit for review can now be chosen for a rule.
+
+= 1.0.5 = 
+Bug fix - undefined index publish_action limit-posts 205.
 
 == Upgrade Notice ==
 
