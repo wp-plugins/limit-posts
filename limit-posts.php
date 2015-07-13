@@ -3,7 +3,7 @@
 Plugin Name: Limit Posts
 Plugin URI: www.limitposts.com
 Description: A plugin to allow administrators to limit the number of posts a user can publish in a given time period.
-Version: 1.0.3
+Version: 1.0.4
 Author: PluginCentral
 Author URI: https://profiles.wordpress.org/plugincentral/
 Text Domain: limit-posts
@@ -61,6 +61,9 @@ class CBLimitPosts{
 		
 		//Setup the new post hook
 		add_action('admin_notices', array($this, 'applyPostLimtRules'));
+		
+		//Add shortcode
+		add_shortcode('limit_posts', array($this, 'shortcodeHandler'));
 		
 		
 	}
@@ -171,49 +174,58 @@ class CBLimitPosts{
 		global $pagenow;
 		
 		if ($pagenow == 'post-new.php'){  //submit for review and publish
-			$limitPostRules = $this->getPluginOptions();
+			global $typenow;
 			
-			//Check if any rules have been setup
-			if(!isset($limitPostRules['rule'])){
-				return;
+			$publishAction = 'Publish';
+			if(!current_user_can('publish_posts')){
+				$publishAction = 'Submit For Review';
 			}
 			
-			if($this->isLimitReached($limitPostRules)){
+			if($this->areLimitsReached($typenow, $publishAction)){
 				//disable publish and display message
 				wp_enqueue_style('cb_disable_publish_css', CB_LIMIT_POSTS_PLUGIN_URL . '/css/disablepublish.css');
-				global $typenow;
 				echo '<div class="error"><p>Publication limit has been reached - you cannot create a new '.$typenow.' at this time.</p></div>';
-				return;
 			}
+			
 		}
 	}
 	
+	private function areLimitsReached($currentType, $publishAction){
+		$limitPostRules = $this->getPluginOptions();
+			
+		//Check if any rules have been setup
+		if(!isset($limitPostRules['rule'])){
+			return;
+		}
+		
+		return $this->isLimitReached($limitPostRules, $currentType, $publishAction);
+	}
+	
 	//Determine if a user has reached their publishing limit
-	private function isLimitReached($limitPostRules){
+	private function isLimitReached($limitPostRules, $currentType, $publishAction){
 		//get all relevent rules
 		$userRole = $this->getCurrentUserRole();
 		$userId = $this->getCurrentUserId();
-		global $typenow;
-		$releventRules = $this->getReleventRules($limitPostRules, $userRole, $userId, $typenow);
+		
+		$releventRules = $this->getReleventRules($limitPostRules, $userRole, $userId, $currentType, $publishAction);
 		if(count($releventRules) <= 0){
 			return false;
 		}
-		
+		//echo 'RELEVENT RULE COUNT = '.count($releventRules);
 		foreach($releventRules as $releventRule){
 			//how many posts of this type has this user published within the rules time periods
 			$startDateTime = $this->getStartDateTime($releventRule['period_number'], $releventRule['period_denominator']);
-			$postCount = $this->getPostCount($typenow, $startDateTime, $releventRule['publish_action']);
-			
+			$postCount = $this->getPostCount($currentType, $startDateTime, $releventRule['publish_action']);
+			//echo 'POST COUNT = '.$postCount;
 			if($postCount >= $releventRule['limit']){
 				return true;  //limit has been reached
 			}
 		}
 		
-		
 		return false;
 	}
 	
-	private function getReleventRules($limitPostRules, $userRole, $userId, $typenow){
+	private function getReleventRules($limitPostRules, $userRole, $userId, $postType, $publishAction){
 		
 		//filter out any rules not for users role
 		$rules = $this->filterRulesForUserRole($limitPostRules, $userRole);
@@ -222,7 +234,10 @@ class CBLimitPosts{
 		$rules = $this->filterRulesForUserId($rules, $userId);
 		
 		//filter out any rules not for post type
-		$rules = $this->filterRulesForPostType($rules, $typenow);
+		$rules = $this->filterRulesForPostType($rules, $postType);
+		
+		//filter out any rules where action is not publish / submit
+		$rules = $this->filterRulesForPublishAction($rules, $publishAction);
 		
 		return $rules;
 	}
@@ -297,7 +312,20 @@ class CBLimitPosts{
 		$filterRules = array();
 		
 		foreach($inputRules as $rule){
-			if(strtolower($rule['post_type']) == $postType){
+			if(strtolower($rule['post_type']) == strtolower($postType)){
+				$filterRules[] = $rule;
+			}
+		}
+		
+		return $filterRules;
+	}
+	
+	private function filterRulesForPublishAction($inputRules, $publishAction){
+		$filterRules = array();
+		
+		foreach($inputRules as $rule){
+			//echo 'publish_action = '.$rule['publish_action'].' $publishAction = '.$publishAction;
+			if(strtolower($rule['publish_action']) == strtolower($publishAction)){
 				$filterRules[] = $rule;
 			}
 		}
@@ -356,8 +384,27 @@ class CBLimitPosts{
 		
 		return $count;
 	}
+	
+	public function shortcodeHandler($attr, $content = NULL){
+		$attributes = shortcode_atts(array(
+			'type' => 'post',
+			'action' => 'Publish'
+		), $attr);
+		
+		if (!is_user_logged_in()){
+				return apply_filters('limit_posts_shortcode_not_logged_in', 'You must be logged in');
+		}
+		
+		global $current_user;
+		get_currentuserinfo();
+		
+		if($this->areLimitsReached($attributes['type'], $attributes['action'])){
+			return apply_filters('limit_posts_shortcode_limit_exceeded', 'You have exceeded your limit for this post type');
+		}
+		
+		return apply_filters('limit_posts_shortcode_ok', do_shortcode($content));
+	}
 }
 
-if(is_admin()){
-	$cblp = new CBLimitPosts();
-}
+global $cblp;
+$cblp = new CBLimitPosts();

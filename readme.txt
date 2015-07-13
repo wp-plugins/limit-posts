@@ -4,7 +4,7 @@ Donate link: www.limitposts.com/donate/
 Tags: limit posts, limit number of posts, limit publish, limit post creation, limit post type, limit user, posts per user, restrict posts, restrict number of posts
 Requires at least: 4.0.0
 Tested up to: 4.2.2
-Stable tag: 1.0.3
+Stable tag: 1.0.4
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -23,8 +23,7 @@ You can set up as many limits as you like, for different post types, different u
 *	Specify 0 to block a post type completely.
 *	Time period can be in seconds, minutes, hours, days, weeks, months or years
 *	Make a limit last forever by specifying 9999 years
-
-In a future release I'll also be adding the ability to incorporate this functionality in custom forms.
+*	A shortcode can be added to your forms and pages to use this functionality
 
 == Installation ==
 
@@ -58,6 +57,30 @@ Click on the View support forum button on the right.
 
 A message will be displayed, informing the user that the limit has been reached. The publish section will not be displayed, so the user will not be able to attempt to publish a post.
 
+= How can I use the shortcode? = 
+
+To use the limit rules functionality on your own forms you'll need to add a shortcode to your page:
+
+`[limit_posts] your form code [/limit_posts]`
+
+The following parameters can be used with the shortcode:
+
+`type - this is the post type that the form is dealing with.
+	Values for this can be any post type or custom post type, that you currently have.
+	Default is post.
+action - this is the action which the form submit will take.
+	Values for this can be publish (where submit will publish) and submit for review (where submit will submit for review).
+	Default is publish`
+	
+Example:
+
+'[limit_posts type="post" action="publish"] your form code [/limit_posts]'
+
+= Are there any filter hooks? =
+
+`'limit_posts_shortcode_ok' - when a user can see the form.`
+`'limit_posts_shortcode_limit_exceeded' - when the user limit is reached.`
+`'limit_posts_shortcode_not_logged_in' - when user is not logged in.`
 
 
 == Screenshots ==
