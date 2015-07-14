@@ -3,7 +3,7 @@
 Plugin Name: Limit Posts
 Plugin URI: www.limitposts.com
 Description: A plugin to allow administrators to limit the number of posts a user can publish in a given time period.
-Version: 1.0.5
+Version: 1.0.6
 Author: PluginCentral
 Author URI: https://profiles.wordpress.org/plugincentral/
 Text Domain: limit-posts
@@ -329,7 +329,11 @@ class CBLimitPosts{
 		
 		foreach($inputRules as $rule){
 			//echo 'publish_action = '.$rule['publish_action'].' $publishAction = '.$publishAction;
-			if(strtolower($rule['publish_action']) == strtolower($publishAction)){
+			$ruleAction = 'Publish';
+			if(isset($rule['publish_action'])){
+				$ruleAction = $rule['publish_action'];
+			}
+			if(strtolower($ruleAction) == strtolower($publishAction)){
 				$filterRules[] = $rule;
 			}
 		}
