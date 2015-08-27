@@ -136,7 +136,7 @@ $j(function(){
 		}
 		$j('#publish_action option[value="'+existingValues[$publishActionSelectIndex]+'"]').prop('selected', true);
 		$j('#limit_number').val(existingValues[$limitNumberIndex]);
-		$j('#post_types_select option[value="'+existingValues[$postTypesSelectIndex]+'"]').prop('selected', true);
+		$j('#post_types_select option[value="'+existingValues[$postTypesSelectIndex].toLowerCase()+'"]').prop('selected', true);
 		$j('#period_number').val(existingValues[$periodNumberIndex]);
 		$j('#period_denominator option[value="'+existingValues[$periodDenominatorIndex]+'"]').prop('selected', true);
 	}

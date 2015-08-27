@@ -169,7 +169,6 @@ class CBLimitPosts{
 
 	//Apply any post limit rules which have been set up
 	public function applyPostLimtRules(){
-		wp_dequeue_style('cb_disable_publish_css');
 		
 		global $pagenow;
 		
@@ -183,7 +182,7 @@ class CBLimitPosts{
 			
 			if($this->areLimitsReached($typenow, $publishAction)){
 				//disable publish and display message
-				wp_enqueue_style('cb_disable_publish_css', CB_LIMIT_POSTS_PLUGIN_URL . '/css/disablepublish.css');
+				wp_enqueue_style('cb_disable_publish', CB_LIMIT_POSTS_PLUGIN_URL . '/css/disablepublish.css');
 				echo '<div class="error"><p>Publication limit has been reached - you cannot create a new '.$typenow.' at this time.</p></div>';
 			}
 			
